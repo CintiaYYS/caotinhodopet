@@ -1,3 +1,5 @@
+import ProdutoDAO from "../DB/ProdutoDAO.js"
+
 export default class Produto{
     #id
     #nome
@@ -62,4 +64,24 @@ export default class Produto{
             urlImagem:this.#urlImagem
         }   
     }
+
+    async gravar(){
+        const produtoDAO = new ProdutoDAO();
+        await produtoDAO.gravar(this);
+    }
+    async alterar(){
+        const produtoDAO = new ProdutoDAO();
+        await produtoDAO.alterar(this);
+    }
+
+    async excluir(){
+        const produtoDAO = new ProdutoDAO();
+        await produtoDAO.excluir(this);
+    }
+
+    async consultar(termoBusca){
+        const produtoDAO = new ProdutoDAO();
+        return await produtoDAO.consultar(termoBusca);
+    }
+
 }
