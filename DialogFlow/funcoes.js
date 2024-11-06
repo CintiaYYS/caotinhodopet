@@ -31,7 +31,7 @@ export function criarCustomCard(){
     
 }
 
-export async function obterCardsServicos(tipoCard="custom"){
+export async function obterCardsProdutos(tipoCard="custom"){
 
     const listaCardsProdutos = [];
     const produto = new Produto();

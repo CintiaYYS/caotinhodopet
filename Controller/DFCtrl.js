@@ -1,6 +1,5 @@
-import { obterCardsServicos } from "../DialogFlow/funcoes.js";
-import Chamado from "../Model/Chamado.js";
-import Servico from "../Model/Servico.js";
+import { obterCardsProdutos } from "../DialogFlow/funcoes.js";
+import Produto from "../Model/Produto.js";
 
 export default class DFController {
 
@@ -8,23 +7,15 @@ export default class DFController {
         if (req.method == "POST" && req.is("application/json")) {
             const dados = req.body;
             const intencao = dados.queryResult.intent.displayName;
-            //identificar a origem da requisição (custom ou messenger)
-            //verificar a existência do atributo source
             const origem = dados?.originalDetectIntentRequest?.source;
             let resposta;
             switch (intencao) {
                 case 'Default Welcome Intent':
                     resposta = await exibirMenu(origem);
                     break;
-
                 case 'SelecaoSuporte':
                     resposta = await processarEscolha(dados, origem);
                     break;
-                /*
-                case 'coletaDadosDemandante':
-                    resposta = await identificarUsuario(dados, origem);
-                    break;
-                */
                 case 'simConcluirDemanda':
                     resposta = await registrarChamado(dados, origem);
                     break;
@@ -33,7 +24,7 @@ export default class DFController {
             resp.json(resposta);
         }
 
-    } //fim processar intenções
+    } 
 
 }
 
@@ -47,14 +38,14 @@ async function exibirMenu(tipo = '') {
     }
 
     try {
-        let cards = await obterCardsServicos(tipo);
+        let cards = await obterCardsProdutos(tipo);
 
         if (tipo == 'custom') {
             resposta['fulfillmentMessages'].push({
                 "text": {
-                    "text": ["Seja bem-vindo ao suporte de TI.\n",
+                    "text": ["Seja bem-vindo ao centro de atendimento do Cãotinho do Pet.\n",
                         "Estamos disponíveis 24h por dia e 7 dias na semana.\n",
-                        "Estamos preparados para te ajudar com os seguintes serviços:\n"
+                        "Estamos preparados para te ajudar com os seguintes serviços e produtos:\n"
                     ]
                 }
             });
@@ -73,10 +64,10 @@ async function exibirMenu(tipo = '') {
                 "payload": {
                     "richContent": [[{
                         "type": "description",
-                        "title": "Seja bem-vindo ao suporte de TI.\n",
+                        "title": "Seja bem-vindo ao centro de atendimento do Cãotinho do Pet.\n",
                         "text": [
                             "Estamos disponíveis 24h por dia e 7 dias na semana.\n",
-                            "Estamos preparados para te ajudar com os seguintes serviços:\n"
+                            "Estamos preparados para te ajudar com os seguintes serviços e produtos:\n"
                         ]
                     }]]
                 }
@@ -96,9 +87,9 @@ async function exibirMenu(tipo = '') {
         if (tipo == 'custom') {
             resposta['fulfillmentMessages'].push({
                 "text": {
-                    "text": ["Não foi possível recuperar a lista de suporte dos serviços disponíveis.",
+                    "text": ["Não foi possível recuperar a lista de serviços e produtos disponíveis.",
                         "Descupe-nos pelo transtorno!",
-                        "Entre em contato conosco por telefone ☎ (18) 3226-1515."
+                        "Entre em contato conosco por telefone ☎ (18) 99641-4912."
                     ]
                 }
             });
@@ -108,10 +99,10 @@ async function exibirMenu(tipo = '') {
                 "payload": {
                     "richContent": [[{
                         "type": "description",
-                        "title": "Não foi possível recuperar a lista de suporte dos serviços disponíveis.\n",
+                        "title": "Não foi possível recuperar a lista de serviços e produtos disponíveis..\n",
                         "text": [
                             "Descupe-nos pelo transtorno!\n",
-                            "Entre em contato conosco por telefone ☎ (18) 3226-1515.\n"
+                            "Entre em contato conosco por telefone ☎ (18) 99641-4912."                            
                         ]
                     }]]
                 }
@@ -134,21 +125,21 @@ async function processarEscolha(dados, origem) {
     }
     if (!global.dados[sessao]) {
         global.dados[sessao] = {
-            'servicos': [],
+            'produtos': [],
         };
     }
-    let servicosSelecionados = dados.queryResult.parameters.Servico
-    global.dados[sessao]['servicos'].push(...servicosSelecionados);
+    let produtosSelecionados = dados.queryResult.parameters.produto
+    global.dados[sessao]['produtos'].push(...produtosSelecionados);
 
     let listaMensagens = [];
-    for (const serv of servicosSelecionados) {
-        const servico = new Servico();
-        const resultado = await servico.consultar(serv);
+    for (const prod of produtosSelecionados) {
+        const produto = new Produto();
+        const resultado = await produto.consultar(prod);
         if (resultado.length > 0) {
-            listaMensagens.push(`✅ ${serv} registrado com sucesso! \n`);
+            listaMensagens.push(`${prod} registrado com sucesso! \n`);
         }
         else {
-            listaMensagens.push(`❌ O ${serv} não está disponível!\n`);
+            listaMensagens.push(`${prod} não está disponível!\n`);
         }
     }
 
@@ -176,20 +167,18 @@ async function processarEscolha(dados, origem) {
     return resposta;
 }
 
-async function registrarChamado(dados, origem) {
+async function agendar(dados, origem) {
     const sessao = dados.session.split('/').pop();
-    //Fique atento, será necessário recuperar o usuário identificado na sessão
-    //simulando a existência de um usuário cadastrado....
     const usuario = {
         "cpf": "111.111.111-11"
     }
-    let listaDeServicos = [];
-    const servicosSelecionados = global.dados[sessao]['servicos'];
-    const servicoM = new Servico();
-    for (const serv of servicosSelecionados) {
-        const busca = await servicoM.consultar(serv);
+    let listaDeProdutos = [];
+    const produtosSelecionados = global.dados[sessao]['produtos'];
+    const produtoM = new Produto();
+    for (const prod of produtosSelecionados) {
+        const busca = await produtoM.consultar(prod);
         if (busca.length > 0) {
-            listaDeServicos.push(busca[0]); //primeiro serviço da lista 
+            listaDeProdutos.push(busca[0]); 
         }
     }
     const chamado = new Chamado(0, '', usuario, listaDeServicos);
