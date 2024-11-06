@@ -33,7 +33,7 @@ export default class AgendamentoDAO{
                 
                 const sqlChamado = "INSERT INTO agendamento(dataInicio,dataFinal,fk_usu_cpf,fk_prod) VALUES(?,?,?,?)";
                 const data = new Date();
-                let parametros = [data.toLocaleDateString(), agendamento.usuario.cpf];
+                let parametros = [data.toLocaleDateString(),data.toLocaleDateString(), agendamento.usuario.cpf,agendamento.produto];
                 conexao.execute(sqlChamado, parametros);                
                 conexao.commit();
                 conexao.release();
