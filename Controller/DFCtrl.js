@@ -1,4 +1,5 @@
 import { obterCardsProdutos } from "../DialogFlow/funcoes.js";
+import Agendamento from "../Model/Agendamento.js";
 import Produto from "../Model/Produto.js";
 
 export default class DFController {
@@ -17,7 +18,7 @@ export default class DFController {
                     resposta = await processarEscolha(dados, origem);
                     break;
                 case 'simConcluirDemanda':
-                    resposta = await registrarChamado(dados, origem);
+                    resposta = await agendar(dados, origem);
                     break;
 
             }
@@ -107,7 +108,7 @@ async function exibirMenu(tipo = '') {
                     }]]
                 }
             });
-        }//fim else
+        }
         return resposta;
     }
 
@@ -181,8 +182,8 @@ async function agendar(dados, origem) {
             listaDeProdutos.push(busca[0]); 
         }
     }
-    const chamado = new Chamado(0, '', usuario, listaDeServicos);
-    await chamado.gravar();
+    const agendamento = new Agendamento(0, '', usuario, listaDeProdutos);
+    await agendamento.gravar();
 
     let resposta = {
         "fulfillmentMessages": []
@@ -191,7 +192,7 @@ async function agendar(dados, origem) {
     if (origem) {
         resposta['fulfillmentMessages'].push({
             "text": {
-                "text": [`Chamado nº ${chamado.numero} registrado com sucesso. \n`,
+                "text": [`Agendamento nº ${agendamento.id} registrado com sucesso. \n`,
                     "Anote o número para consulta ou acompanhamento posterior.\n"
                 ]
             }
@@ -203,7 +204,7 @@ async function agendar(dados, origem) {
                 "richContent": [[{
                     "type": "description",
                     "title": "",
-                    "text": [`Chamado nº ${chamado.numero} registrado com sucesso. \n`,
+                    "text": [`Agendamento nº ${agendamento.id} registrado com sucesso. \n`,
                         "Anote o número para consulta ou acompanhamento posterior.\n"
                     ]
                 }]]
