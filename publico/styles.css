@@ -15,7 +15,7 @@ body {
 /* Cabeçalho */
 .header {
     text-align: center;
-    background-color: #4CAF50;
+    background-color: #656565;
     color: #fff;
     padding: 20px;
 }
@@ -70,7 +70,7 @@ body {
 }
 
 .card button {
-    background-color: #4CAF50;
+    background-color: #656565;
     color: #fff;
     border: none;
     padding: 10px 15px;
@@ -79,7 +79,7 @@ body {
 }
 
 .card button:hover {
-    background-color: #45a049;
+    background-color: #c1c1c1;
 }
 
 /* Seção de Hospedagem */
@@ -107,11 +107,11 @@ body {
 
 .lodging-details h3 {
     font-size: 1.5em;
-    color: #4CAF50;
+    color: #656565;
 }
 
 .lodging-details button {
-    background-color: #4CAF50;
+    background-color: #656565;
     color: #fff;
     border: none;
     padding: 10px 15px;
@@ -120,7 +120,7 @@ body {
 }
 
 .lodging-details button:hover {
-    background-color: #45a049;
+    background-color: #c1c1c1;
 }
 
 /* Rodapé */
@@ -133,7 +133,7 @@ body {
 }
 
 .footer a {
-    color: #4CAF50;
+    color: #656565;
     text-decoration: none;
 }
 
