@@ -1,3 +1,6 @@
+import Produto from '../Model/Produto.js'
+import conectar from './Conexao.js';
+
 export default class ProdutoDAO {
 
     constructor(){
@@ -6,7 +9,7 @@ export default class ProdutoDAO {
 
     async init() {
         try {
-            //criar a tabela serviço caso ela não exista
+            
             const sql = ` CREATE TABLE IF NOT EXISTS produto(
             id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
             nome VARCHAR(100) NOT NULL,
