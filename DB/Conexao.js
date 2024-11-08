@@ -12,7 +12,7 @@ export default async function conectar(){
             database: process.env.DB_DATABASE,
             connectionLimit: 50,
             maxIdle: 30,
-            idleTimeout: 60000,
+            idleTimeout: 600000,
             queueLimit: 0,
             enableKeepAlive: true,
             keepAliveInitialDelay: 0,

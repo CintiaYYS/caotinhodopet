@@ -14,10 +14,10 @@ export default class DFController {
                 case 'Default Welcome Intent':
                     resposta = await exibirMenu(origem);
                     break;
-                case 'SelecaoSuporte':
+                case 'selecaoProduto':
                     resposta = await processarEscolha(dados, origem);
                     break;
-                case 'simConcluirDemanda':
+                case 'coletaInformacoes':
                     resposta = await agendar(dados, origem);
                     break;
 
@@ -35,13 +35,13 @@ async function exibirMenu(tipo = '') {
     };
 
     if (tipo) {
-        tipo = 'custom';
+        tipo = 'DIALOGFLOW_CONSOLE';
     }
 
     try {
         let cards = await obterCardsProdutos(tipo);
 
-        if (tipo == 'custom') {
+        if (tipo == 'DIALOGFLOW_CONSOLE') {
             resposta['fulfillmentMessages'].push({
                 "text": {
                     "text": ["Seja bem-vindo ao centro de atendimento do Cãotinho do Pet.\n",
@@ -85,7 +85,7 @@ async function exibirMenu(tipo = '') {
         }
     }
     catch (erro) {
-        if (tipo == 'custom') {
+        if (tipo == 'DIALOGFLOW_CONSOLE') {
             resposta['fulfillmentMessages'].push({
                 "text": {
                     "text": ["Não foi possível recuperar a lista de serviços e produtos disponíveis.",
@@ -171,7 +171,7 @@ async function processarEscolha(dados, origem) {
 async function agendar(dados, origem) {
     const sessao = dados.session.split('/').pop();
     const usuario = {
-        "cpf": "111.111.111-11"
+        "cpf": geraCPF()
     }
     let listaDeProdutos = [];
     const produtosSelecionados = global.dados[sessao]['produtos'];
@@ -213,4 +213,20 @@ async function agendar(dados, origem) {
     }
     return resposta;
 
+}
+
+function geraCPF() {
+    let resultado = '';
+
+    for (let i = 0; i < 14; i++) {
+        if (i === 3 || i === 7) {
+            resultado += '.'; // Adiciona ponto na posição 3 e 7
+        } else if (i === 11) {
+            resultado += '-'; // Adiciona hífen na posição 11
+        } else {
+            resultado += Math.floor(Math.random() * 10); // Adiciona número aleatório
+        }
+    }
+
+    return resultado;
 }

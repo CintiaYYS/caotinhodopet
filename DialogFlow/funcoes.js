@@ -19,19 +19,13 @@ export function criarCustomCard(){
         card: {
             title:"",
             subtitle:"",
-            imageUri:"",
-            buttons: [
-                {
-                    text:"botão",
-                    postback:""
-                }
-            ]
+            imageUri:"",            
         }
     }
     
 }
 
-export async function obterCardsProdutos(tipoCard="custom"){
+export async function obterCardsProdutos(tipoCard="DIALOGFLOW_CONSOLE"){
 
     const listaCardsProdutos = [];
     const produto = new Produto();
@@ -40,7 +34,7 @@ export async function obterCardsProdutos(tipoCard="custom"){
     for (const produto of produtos){
 
         let card;
-        if (tipoCard=="custom"){
+        if (tipoCard=="DIALOGFLOW_CONSOLE"){
             card = criarCustomCard();
             card.card.title = produto.nome;
             card.card.subtitle = `Descrição: ${produto.descricao} \n

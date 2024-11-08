@@ -9,7 +9,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use("/servico",rotaProduto);
+app.use("/produto",rotaProduto);
 app.use("/webhook", rotaDF)
 app.use(express.static('./publico'));
 
