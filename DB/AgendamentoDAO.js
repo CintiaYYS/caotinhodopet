@@ -30,11 +30,17 @@ export default class AgendamentoDAO{
             try {
                 const conexao = await conectar();
                 conexao.beginTransaction();
-                console.log("agendamento.usuario.",agendamento.usuario.nome)
+
                 const sqlAgendamento = "INSERT INTO agendamento(dataInicio,dataFinal,fk_usu_cpf,fk_prod) VALUES(?,?,?,?)";
-                const data = new Date();
-                let parametros = [data.toLocaleDateString(),data.toLocaleDateString(), agendamento.usuario.cpf,agendamento.produto];
-                conexao.execute(sqlAgendamento, parametros);                
+                const dataInicio = new Date();
+                const dataFinal = new Date();
+                const dias = Math.floor(Math.random() * (max - min + 1)) + min;
+                dataInicio.setDate(dataInicio.getDate() + dias);
+                dias = Math.floor(Math.random() * (max - min + 1)) + min;
+                dataFinal.setDate(dataInicio.getDate() + dias);
+                let parametros = [dataInicio.toLocaleDateString(),dataFinal.toLocaleDateString(), agendamento.usuario.cpf,agendamento.produto[0].id];
+                const resultado = await conexao.execute(sqlAgendamento, parametros);    
+                agendamento.id = resultado[0].insertId;
                 conexao.commit();
                 conexao.release();
             }
@@ -48,4 +54,35 @@ export default class AgendamentoDAO{
 
     }
 
+    //Busca o agendamento usando o número do agendamento
+    async consultar(termoBusca) {
+        if (!termoBusca){
+            termoBusca='';
+        }
+        const sql = "SELECT * FROM agendamento WHERE numero = ?";        
+        const conexao = await conectar();
+        const [registros, campos] = await conexao.query(sql,termoBusca);    
+        const registro = registros[0];
+        const agendamento = new Agendamento(registro['numero'],                                    
+                                    registro['dataInicio'],
+                                    registro['dataFinal'],
+                                    registro['fk_usu_cpf'],
+                                    registro['fk_prod']
+                                );
+                
+        return agendamento;
+    }
+/*
+    async consultar(termoBusca){
+        if(!termoBusca){
+            termoBusca='';
+        }
+        const sql = `SELECT * FROM agendamento WHERE numero = ?`;
+        const parametros = [termoBusca]
+        const conexao = await conectar();
+        const [registro, campos] = await conexao.query(sql,parametros);        
+        const agendamento = new Agendamento(registro['id'], registro['dataInicio'], registro['dataFinal'],registro['fk_usu_cpf'], registro['fk_prod']);            
+        return agendamento;
+    }
+*/
 }

@@ -114,7 +114,7 @@ export default class ProdutoCtrl {
         const termoBusca = requisicao.params.produto;
         if (requisicao.method == "GET") {
             const produto = new Produto(0);
-            produto.consultar(termoBusca).then((listaProduto) => {
+            produto.selecionar(termoBusca).then((listaProduto) => {
                 resposta.status(200).json({
                     "status": true,
                     "listaProdutos": listaProduto

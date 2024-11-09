@@ -74,4 +74,9 @@ export default class Agendamento{
         const agendDAO = new AgendamentoDAO();
         await agendDAO.gravar(this);
     }
+
+    async consultar(termoBusca){
+        const agendDAO = new AgendamentoDAO();    
+        return await agendDAO.consultar(termoBusca);
+    }
 }

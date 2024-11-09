@@ -6,7 +6,7 @@ export default class Usuario{
     #endereco
     #telefone
  
-    constructor(id=0,nome,endereco,telefone){
+    constructor(cpf=0,nome,telefone,endereco){
         this.#cpf = cpf;
         this.#nome = nome;
         this.#endereco = endereco;

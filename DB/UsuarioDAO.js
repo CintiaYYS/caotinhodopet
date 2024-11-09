@@ -28,11 +28,12 @@ export default class UsuarioDAO {
 
     async gravar(usuario) {
         if (usuario instanceof Usuario) {
-            const sql = `INSERT INTO usuario(nome,telefone, endereco)
-                        VALUES (?,?,?)`;
-            const parametros = [usuario.nome,
+            const sql = `INSERT INTO usuario(pk_usu_cpf,nome,telefone, endereco)
+                        VALUES (?,?,?,?)`;
+            const parametros = [usuario.cpf,
+                usuario.nome,
                 usuario.telefone,
-                produto.endereco];
+                usuario.endereco];
             const conexao = await conectar();
             const resultado = await conexao.execute(sql, parametros);
             usuario.id = resultado[0].insertId;

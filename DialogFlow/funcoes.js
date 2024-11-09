@@ -29,7 +29,7 @@ export async function obterCardsProdutos(tipoCard="DIALOGFLOW_CONSOLE"){
 
     const listaCardsProdutos = [];
     const produto = new Produto();
-    const produtos = await produto.consultar();
+    const produtos = await produto.selecionar('');
 
     for (const produto of produtos){
 

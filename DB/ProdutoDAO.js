@@ -65,27 +65,38 @@ export default class ProdutoDAO {
             await conexao.execute(sql, parametros);
         }
     }
+    //Consulta o produto usando o id
+    //o termo de busca precisa ser um número
+    async consultar(termoBusca) {        
+        console.log("Buscando produto de id: ", termoBusca);
+        const sql = "SELECT * FROM produto WHERE id = ?";        
+        const conexao = await conectar();
+        const [registros, campos] = await conexao.query(sql,termoBusca);        
+        const registro = registros[0];
+        const produto = new Produto(registro['id'],
+                                    registro['nome'],
+                                    registro['descricao'],
+                                    registro['valor'],
+                                    registro['urlImagem']
+                                );    
+        return produto;
+    }
 
-    async consultar(termoBusca) {
-        if (!termoBusca){
+    //Seleciona os produtos que tem um termo na descrição ou seleciona todos os produtos 
+    async selecionar(termoBusca){
+        if(!termoBusca){
             termoBusca='';
         }
-        const sql = "SELECT * FROM produto WHERE descricao LIKE ? order by nome";
-        const parametros = ["%" + termoBusca + "%"]
+        const sql = `SELECT * FROM produto WHERE descricao LIKE ? order by nome`;
+        const parametros = ["%"+termoBusca+"%"]
         const conexao = await conectar();
         const [registros, campos] = await conexao.query(sql,parametros);
-        let listaProduto=[];
+        let listaProdutos=[];
         for (const registro of registros){
-            const produto = new Produto(registro['id'],
-                                        registro['nome'],
-                                        registro['descricao'],
-                                        registro['valor'],
-                                        registro['urlImagem']
-                                    );
-                
-            listaProduto.push(produto);
+            const produto = new Produto(registro['id'], registro['nome'], registro['descricao'],registro['valor'], registro['urlImagem']);
+            listaProdutos.push(produto);
         }
-        return listaProduto;
+        return listaProdutos;
     }
 
 }
