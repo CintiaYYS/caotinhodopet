@@ -180,19 +180,11 @@ async function processarEscolha(dados, origem) {
 async function agendar(dados, origem) {
     const sessao = dados.session.split('/').pop();
     
-    let listaDeProdutos = [];
-    const produtosSelecionados = global.dados[sessao]['produtos'];
     const produtoM = new Produto();
-    for (const prod of produtosSelecionados) {
-        const busca = await produtoM.selecionar(prod);
-        if (busca.length > 0) {
-            listaDeProdutos.push(busca[0]); 
-        }
-    }
-
+    const prod = await produtoM.selecionar(global.dados[sessao]['produtos'][0])
     const usu = global.dados[sessao]['usuario']
     const usuario = new Usuario(usu.cpf,usu.nome,usu.telefone,usu.endereco);
-    const agendamento = new Agendamento(0, '','', usuario, listaDeProdutos);
+    const agendamento = new Agendamento(0, '','', usuario, prod);
     await agendamento.gravar();
 
     let resposta = {

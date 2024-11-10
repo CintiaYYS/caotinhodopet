@@ -86,7 +86,7 @@ export default class Produto{
 
     async selecionar(termoBusca){
         const produtoDAO = new ProdutoDAO();
-        return await produtoDAO.selecionar();
+        return await produtoDAO.selecionar(termoBusca);
     }
 
 }

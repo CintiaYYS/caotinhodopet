@@ -68,7 +68,7 @@ export default class ProdutoDAO {
     //Consulta o produto usando o id
     //o termo de busca precisa ser um número
     async consultar(termoBusca) {        
-        console.log("Buscando produto de id: ", termoBusca);
+        
         const sql = "SELECT * FROM produto WHERE id = ?";        
         const conexao = await conectar();
         const [registros, campos] = await conexao.query(sql,termoBusca);        

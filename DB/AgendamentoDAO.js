@@ -34,10 +34,13 @@ export default class AgendamentoDAO{
                 const sqlAgendamento = "INSERT INTO agendamento(dataInicio,dataFinal,fk_usu_cpf,fk_prod) VALUES(?,?,?,?)";
                 const dataInicio = new Date();
                 const dataFinal = new Date();
-                const dias = Math.floor(Math.random() * (max - min + 1)) + min;
+                const min = 1;
+                const max = 10;
+                let dias = Math.floor(Math.random() * (max - min + 1)) + min;
                 dataInicio.setDate(dataInicio.getDate() + dias);
                 dias = Math.floor(Math.random() * (max - min + 1)) + min;
                 dataFinal.setDate(dataInicio.getDate() + dias);
+                
                 let parametros = [dataInicio.toLocaleDateString(),dataFinal.toLocaleDateString(), agendamento.usuario.cpf,agendamento.produto[0].id];
                 const resultado = await conexao.execute(sqlAgendamento, parametros);    
                 agendamento.id = resultado[0].insertId;
